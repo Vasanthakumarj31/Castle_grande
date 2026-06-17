@@ -124,16 +124,7 @@ export default function Hero() {
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,27,42,0.3) 0%, transparent 60%)', pointerEvents: 'none' }} />
             </div>
 
-            {/* Floating BHK badge - responsive placement */}
-            <div style={{
-              position: 'absolute', bottom: '-15px', left: '-5px',
-              background: '#fff', borderRadius: '12px', padding: '10px 16px',
-              boxShadow: '0 8px 32px rgba(13,27,42,0.2)', border: '1px solid rgba(201,150,74,0.2)',
-              zIndex: 2,
-            }}>
-              <div style={{ color: '#C9964A', fontWeight: 800, fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', fontFamily: 'var(--font-serif)' }}>3 &amp; 4 BHK</div>
-              <div style={{ color: '#2C3E50', fontSize: 'clamp(10px, 1.5vw, 12px)', fontWeight: 600 }}>Premium Community Villas</div>
-            </div>
+
 
             {/* Limited badge - responsive placement */}
             <div style={{

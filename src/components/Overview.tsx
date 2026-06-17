@@ -4,7 +4,6 @@ import { Ruler, ShieldCheck, Home, Sparkles } from 'lucide-react';
 const cards = [
   { icon: <Ruler size={26} />,      label: 'Plot Sizes',    value: 'Various Sizes',  detail: 'Flexible configurations to suit your dream home vision', highlight: false },
   { icon: <ShieldCheck size={26} />, label: 'Approvals',    value: 'DTCP & RERA',    detail: 'DTCP No. 431/2025  ·  RERA No. 1143/2026', highlight: false },
-  { icon: <Home size={26} />,        label: 'Configuration', value: '3 & 4 BHK',     detail: 'Premium Community Villas', highlight: true },
   { icon: <Sparkles size={26} />,    label: 'Amenities',     value: '20+ Modern',     detail: 'State-of-the-art facilities for elevated community living', highlight: false },
 ];
 

@@ -5,7 +5,6 @@ const reasons = [
   { icon: <ShieldCheck size={26} />, title: 'DTCP & RERA Approved',      desc: 'Full legal compliance — DTCP No. 431/2025 & RERA No. 1143/2026. Zero risk, 100% peace of mind.' },
   { icon: <MapPin size={26} />,      title: 'Prime MTP Road Location',    desc: "In the heart of Coimbatore's fastest-growing real estate corridor, steps from top institutions." },
   { icon: <Star size={26} />,        title: '20+ Modern Amenities',       desc: 'Security, greenery, temple, solar fencing and more — all included for complete comfort.' },
-  { icon: <Home size={26} />,        title: '3 & 4 BHK Premium Villas',   desc: 'Spacious, architect-designed community villas built with premium materials and finishes.' },
   { icon: <TrendingUp size={26} />,  title: 'High-Growth Corridor',       desc: 'Property values on MTP Road have shown strong year-on-year appreciation.' },
   { icon: <Lock size={26} />,        title: 'Gated Community',            desc: '24/7 security, CCTV surveillance, and solar electric fencing for a truly secure environment.' },
 ];
@@ -18,7 +17,7 @@ export default function WhyBuy() {
           <span style={{ color: '#C9964A', fontSize: '11px', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', display: 'block', marginBottom: '14px' }}>Why Castle Grande?</span>
           <span className="gold-divider" aria-hidden="true" style={{ display: 'block', marginBottom: '20px' }} />
           <h2 id="why-buy-heading" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 800, color: '#0D1B2A', lineHeight: 1.2 }}>
-            Six Compelling Reasons<br /><span style={{ color: '#C9964A' }}>to Invest Today</span>
+            Five Compelling Reasons<br /><span style={{ color: '#C9964A' }}>to Invest Today</span>
           </h2>
         </div>
 

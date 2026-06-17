@@ -1,130 +1,197 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import Image from 'next/image';
-import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ZoomIn, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
+
+const categories = ['All', 'Overview', 'Layout', 'Site Progress'];
 
 const items = [
-  { src: '/brochure.jpg',          alt: 'Castle Grande premium community — luxury villas at Coimbatore',          label: 'Community Overview' },
-  { src: '/vellakinar-layout.png', alt: 'Vellakinar Layout aerial view with temple and amenities',                label: 'Community Layout' },
-  { src: '/office-room.png',       alt: 'Castle Grande site office room building exterior',                       label: 'Site Office' },
-  { src: '/real-entrance.png',     alt: 'Castle Grande grand entrance gate — gated community Coimbatore',         label: 'Grand Entrance' },
+  { src: '/brochure.jpg', alt: 'Castle Grande premium community', label: 'Community Overview', category: 'Overview', className: 'md:col-span-2 md:row-span-2' },
+  { src: '/site-3.jpeg', alt: 'Real-time site progress', label: 'Site Construction', category: 'Site Progress', className: 'md:col-span-2 md:row-span-1' },
+  { src: '/vellakinar-layout.png', alt: 'Vellakinar Layout aerial view', label: 'Community Layout', category: 'Layout', className: 'md:col-span-1 md:row-span-1' },
+  { src: '/office-room.png', alt: 'Castle Grande site office', label: 'Site Office', category: 'Overview', className: 'md:col-span-1 md:row-span-1' },
+  { src: '/real-entrance.png', alt: 'Castle Grande entrance gate', label: 'Grand Entrance', category: 'Overview', className: 'md:col-span-1 md:row-span-1' },
+  { src: '/site-1.jpeg', alt: 'Real-time site progress', label: 'Site Progress', category: 'Site Progress', className: 'md:col-span-1 md:row-span-1' },
+  { src: '/site-2.jpeg', alt: 'Real-time site progress', label: 'Site Progress', category: 'Site Progress', className: 'md:col-span-1 md:row-span-1' },
+  { src: '/site-4.jpeg', alt: 'Real-time site progress', label: 'Site Progress', category: 'Site Progress', className: 'md:col-span-1 md:row-span-1' },
+  { src: '/site-5.jpeg', alt: 'Real-time site progress', label: 'Site Progress', category: 'Site Progress', className: 'md:col-span-2 md:row-span-1' },
 ];
 
 export default function Gallery() {
   const [idx, setIdx] = useState<number | null>(null);
+  const [filter, setFilter] = useState('All');
+
+  const filteredItems = useMemo(() => {
+    if (filter === 'All') return items;
+    return items.filter(item => item.category === filter);
+  }, [filter]);
+
   const close = useCallback(() => setIdx(null), []);
-  const prev  = useCallback(() => setIdx(i => i === null ? 0 : (i - 1 + items.length) % items.length), []);
-  const next  = useCallback(() => setIdx(i => i === null ? 0 : (i + 1) % items.length), []);
+  
+  // Find the actual index in the original array for the lightbox navigation
+  const prev = useCallback(() => setIdx(i => i === null ? 0 : (i - 1 + filteredItems.length) % filteredItems.length), [filteredItems]);
+  const next = useCallback(() => setIdx(i => i === null ? 0 : (i + 1) % filteredItems.length), [filteredItems]);
 
   return (
-    <section id="gallery" style={{ background: '#F8F5F0', padding: '80px 0' }} aria-labelledby="gallery-heading">
-      <div className="page-container">
+    <section id="gallery" style={{ background: '#F8F5F0', padding: '100px 0' }} aria-labelledby="gallery-heading">
+      <div className="page-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span style={{ color: '#C9964A', fontSize: '11px', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', display: 'block', marginBottom: '14px' }}>
+        {/* Header Section */}
+        <div className="text-center mb-10" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <span style={{ color: '#C9964A', fontSize: '12px', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '12px' }}>
             Visual Journey
           </span>
-          <span className="gold-divider" aria-hidden="true" style={{ display: 'block', marginBottom: '20px' }} />
-          <h2 id="gallery-heading" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 800, color: '#0D1B2A' }}>
-            Gallery
+          <h2 id="gallery-heading" style={{ fontFamily: 'var(--font-serif)', color: '#0D1B2A', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, marginBottom: '20px' }}>
+            Our Gallery
           </h2>
-          <p style={{ color: '#6B7280', marginTop: '12px', fontSize: '14px', maxWidth: '400px', margin: '12px auto 0', lineHeight: 1.7 }}>
-            A glimpse into the Castle Grande lifestyle. Click any image to view full screen.
+          <p style={{ color: '#6B7280', maxWidth: '600px', textAlign: 'center', fontSize: '16px', lineHeight: 1.6, margin: '0 auto' }}>
+            Explore the architectural brilliance, premium amenities, and the real-time progress of Castle Grande.
           </p>
         </div>
 
-        {/* Masonry-style grid — 2 cols top, 2 cols bottom */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-          {items.map((item, i) => (
+        {/* Filter Tabs */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginBottom: '48px' }}>
+          {categories.map(cat => (
             <button
-              key={item.src}
-              id={`gallery-item-${i}`}
+              key={cat}
+              onClick={() => setFilter(cat)}
+              style={{
+                padding: '10px 24px',
+                borderRadius: '999px',
+                fontSize: '14px',
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                backgroundColor: filter === cat ? '#0D1B2A' : '#ffffff',
+                color: filter === cat ? '#ffffff' : '#4B5563',
+                boxShadow: filter === cat ? '0 10px 25px -5px rgba(13,27,42,0.4)' : '0 2px 10px rgba(0,0,0,0.05)',
+                transform: filter === cat ? 'scale(1.05)' : 'scale(1)'
+              }}
+              onMouseEnter={e => {
+                if (filter !== cat) {
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  e.currentTarget.style.color = '#0D1B2A';
+                }
+              }}
+              onMouseLeave={e => {
+                if (filter !== cat) {
+                  e.currentTarget.style.backgroundColor = '#ffffff';
+                  e.currentTarget.style.color = '#4B5563';
+                }
+              }}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Bento Grid Gallery */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[280px] gap-4 lg:gap-6" style={{ gridAutoFlow: 'dense' }}>
+          {filteredItems.map((item, i) => (
+            <button
+              key={item.src + i}
               onClick={() => setIdx(i)}
               aria-label={`View ${item.label} fullscreen`}
-              style={{
-                position: 'relative', borderRadius: '16px', overflow: 'hidden',
-                border: 'none', padding: 0, cursor: 'pointer', display: 'block',
-                boxShadow: '0 4px 20px rgba(13,27,42,0.1)',
-                transition: 'transform 0.25s, box-shadow 0.25s',
-              }}
-              onMouseEnter={e => { const el = e.currentTarget; el.style.transform='translateY(-4px)'; el.style.boxShadow='0 16px 48px rgba(13,27,42,0.2)'; }}
-              onMouseLeave={e => { const el = e.currentTarget; el.style.transform='translateY(0)'; el.style.boxShadow='0 4px 20px rgba(13,27,42,0.1)'; }}
+              className={`group relative rounded-2xl overflow-hidden cursor-pointer block w-full h-full border-0 p-0 text-left bg-gray-200 ${filter === 'All' ? item.className : 'md:col-span-1 md:row-span-1'}`}
+              style={{ boxShadow: '0 10px 30px -10px rgba(13,27,42,0.15)' }}
             >
               <Image
                 src={item.src}
                 alt={item.alt}
-                width={640}
-                height={400}
-                style={{ width: '100%', height: '260px', objectFit: 'cover', display: 'block' }}
+                fill
+                className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
+              
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A]/90 via-[#0D1B2A]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-              {/* Hover overlay with zoom icon */}
-              <div style={{
-                position: 'absolute', inset: 0, background: 'rgba(13,27,42,0)',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                gap: '8px', transition: 'background 0.3s',
-              }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(13,27,42,0.55)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(13,27,42,0)')}>
-                <ZoomIn size={28} style={{ color: '#fff', opacity: 0 }} />
-              </div>
-
-              {/* Label badge */}
-              <div style={{
-                position: 'absolute', bottom: '12px', left: '12px',
-                background: 'rgba(13,27,42,0.72)', backdropFilter: 'blur(4px)',
-                color: '#fff', fontSize: '12px', fontWeight: 600,
-                padding: '5px 14px', borderRadius: '999px',
-              }}>
-                {item.label}
+              {/* Hover Content */}
+              <div className="absolute inset-0 p-6 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-[#C9964A] text-xs font-bold tracking-wider uppercase mb-1 block">
+                      {item.category}
+                    </span>
+                    <h3 className="text-white text-lg font-medium leading-tight">
+                      {item.label}
+                    </h3>
+                  </div>
+                  <div className="bg-white/20 backdrop-blur-md rounded-full p-2 text-white">
+                    <Maximize2 size={18} />
+                  </div>
+                </div>
               </div>
             </button>
           ))}
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: '32px', color: '#C9964A', fontSize: '14px', fontWeight: 500 }}>
-          More photos &amp; 3D walkthrough available —{' '}
-          <a href="#contact" style={{ color: '#C9964A', textDecoration: 'underline', fontWeight: 600 }}>
-            request a brochure
-          </a>
-        </p>
+        <div className="text-center mt-16">
+          <p className="text-gray-600 text-sm md:text-base">
+            Want to see more details?{' '}
+            <a href="#contact" className="text-[#C9964A] font-semibold hover:underline transition-all">
+              Request the full brochure & 3D Walkthrough
+            </a>
+          </p>
+        </div>
       </div>
 
-      {/* Lightbox */}
+      {/* Modern Lightbox */}
       {idx !== null && (
         <div
-          className="lightbox-overlay"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#0D1B2A]/95 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
-          aria-label="Image lightbox"
           onClick={close}
         >
-          <button onClick={close} aria-label="Close lightbox"
-            style={{ position: 'absolute', top: '20px', right: '20px', background: 'none', border: 'none', color: '#fff', cursor: 'pointer', zIndex: 10 }}>
-            <X size={32} />
+          <button 
+            onClick={close} 
+            aria-label="Close lightbox"
+            className="absolute top-6 right-6 text-white/70 hover:text-white hover:rotate-90 transition-all duration-300 z-50 p-2"
+          >
+            <X size={36} />
           </button>
-          <button onClick={e => { e.stopPropagation(); prev(); }} aria-label="Previous image"
-            style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer', zIndex: 10, padding: '12px', borderRadius: '50%' }}>
-            <ChevronLeft size={32} />
+          
+          <button 
+            onClick={e => { e.stopPropagation(); prev(); }} 
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white hover:scale-110 transition-all duration-300 z-50 p-4"
+          >
+            <ChevronLeft size={48} strokeWidth={1.5} />
           </button>
 
-          <div onClick={e => e.stopPropagation()} style={{ maxWidth: '90vw', width: '960px', margin: '0 24px' }}>
-            <Image
-              src={items[idx].src}
-              alt={items[idx].alt}
-              width={1200}
-              height={800}
-              style={{ width: '100%', height: 'auto', borderRadius: '14px', maxHeight: '80vh', objectFit: 'contain', display: 'block' }}
-            />
-            <p style={{ color: 'rgba(255,255,255,0.65)', textAlign: 'center', marginTop: '14px', fontSize: '14px', fontWeight: 500 }}>
-              {items[idx].label}
-            </p>
+          <div 
+            onClick={e => e.stopPropagation()} 
+            className="relative w-full max-w-6xl px-4 md:px-16 max-h-[85vh] flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300"
+          >
+            <div className="relative w-full" style={{ height: '75vh' }}>
+              <Image
+                src={filteredItems[idx].src}
+                alt={filteredItems[idx].alt}
+                fill
+                className="object-contain drop-shadow-2xl"
+                priority
+              />
+            </div>
+            
+            <div className="mt-6 text-center">
+              <span className="text-[#C9964A] text-xs font-bold tracking-widest uppercase block mb-2">
+                {filteredItems[idx].category}
+              </span>
+              <p className="text-white text-xl font-light tracking-wide">
+                {filteredItems[idx].label}
+              </p>
+              <p className="text-white/50 text-sm mt-2">
+                {idx + 1} / {filteredItems.length}
+              </p>
+            </div>
           </div>
 
-          <button onClick={e => { e.stopPropagation(); next(); }} aria-label="Next image"
-            style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer', zIndex: 10, padding: '12px', borderRadius: '50%' }}>
-            <ChevronRight size={32} />
+          <button 
+            onClick={e => { e.stopPropagation(); next(); }} 
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white hover:scale-110 transition-all duration-300 z-50 p-4"
+          >
+            <ChevronRight size={48} strokeWidth={1.5} />
           </button>
         </div>
       )}

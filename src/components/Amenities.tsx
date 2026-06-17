@@ -2,7 +2,6 @@
 import { Home, Shield, Camera, Flame, Zap, Leaf } from 'lucide-react';
 
 const amenities = [
-  { icon: <Home size={30} />,   label: 'Premium Villas & Plots',   desc: 'Thoughtfully designed homes and investment-grade plots.' },
   { icon: <Shield size={30} />, label: '24/7 Security',             desc: 'Round-the-clock professional security personnel.' },
   { icon: <Camera size={30} />, label: 'CCTV Live Tracking',        desc: 'Comprehensive surveillance for complete peace of mind.' },
   { icon: <Flame size={30} />,  label: 'Vinayagar Temple',          desc: 'Sacred community temple within the gated premises.' },
